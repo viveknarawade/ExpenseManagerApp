@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "name": "expensemanagerapp",
+  "version": "1.0.0",
+  "description": "A full-stack Expense Manager application built with Flutter (Frontend) and Node.js + Express.js (Backend), using MongoDB as the database. This app helps users track and manage their expenses in real-time with features like categorized transactions and  statistics.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viveknarawade/ExpenseManagerApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/viveknarawade/ExpenseManagerApp/issues"
+  },
+  "homepage": "https://github.com/viveknarawade/ExpenseManagerApp#readme"
+}
