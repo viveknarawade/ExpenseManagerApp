@@ -7,6 +7,6 @@ const asyncHandler = (fun) => async (req, res, next) => {
       message: error.message,
     });
   }
-};
+};      
 
-
+module.exports = asyncHandler
