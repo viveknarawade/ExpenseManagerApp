@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:expense_manager_frontend/controller/user_controller.dart';
+import 'package:expense_manager_frontend/utils/image_picker.dart';
 import 'package:expense_manager_frontend/view/screens/login_screen.dart';
 import 'package:expense_manager_frontend/view/widget/custom_inputfield.dart';
 import 'package:flutter/material.dart';
@@ -21,18 +22,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController _userNameController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-
-// picke img
-  Future<void> _pickImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +58,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 // 👇 Profile Image Picker
                 GestureDetector(
-                  onTap: _pickImage,
+                  onTap: () async {
+                    _image = await MyImagePicker().pickImageFromGallery();
+                    setState(() {
+                      
+                    });
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -85,7 +79,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: CircleAvatar(
                       radius: 60,
                       backgroundColor: Color.fromRGBO(14, 161, 125, 1),
-                      backgroundImage: _image != null ? FileImage(_image!) : null,
+                      backgroundImage:
+                          _image != null ? FileImage(_image!) : null,
                       child: _image == null
                           ? const Icon(Icons.add_a_photo,
                               size: 32, color: Colors.white)
@@ -97,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 48),
 
                 // Form Fields
-               CustomInputfield().buildInputField(
+                CustomInputfield().buildInputField(
                   controller: _userNameController,
                   hintText: "Username",
                   icon: Icons.person_outline,
@@ -130,7 +125,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       barrierDismissible: false,
                       builder: (context) => const Center(
                         child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>( Color.fromRGBO(14, 161, 125, 1),),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Color.fromRGBO(14, 161, 125, 1),
+                          ),
                         ),
                       ),
                     );
@@ -167,8 +164,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content:
-                              Text("Registration failed! ${resBody["message"]}"),
+                          content: Text(
+                              "Registration failed! ${resBody["message"]}"),
                           backgroundColor: const Color(0xFFEF4444),
                           behavior: SnackBarBehavior.floating,
                         ),
@@ -179,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     decoration: BoxDecoration(
-                      color:  Color.fromRGBO(14, 161, 125, 1),
+                      color: Color.fromRGBO(14, 161, 125, 1),
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -210,6 +207,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
-  
 }

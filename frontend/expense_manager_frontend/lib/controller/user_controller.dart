@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:expense_manager_frontend/model/user.dart';
+import 'package:expense_manager_frontend/user_session.dart';
 import 'package:http/http.dart' as http;
 
 class UserController {
-
-  
   Future<dynamic> loginUser(String email, String password) async {
     try {
       final res = await http.post(
@@ -22,9 +21,19 @@ class UserController {
 
       final userData = jsonDecode(res.body)["data"];
 
-      User(userData["_id"], userData["userName"], userData["email"], userData["avatar"]);
+      User user = User(
+          userData["_id"],
+          userData["userName"],
+          userData["email"],
+          userData["avatar"],
+          userData["accessToken"],
+          userData["refreshToken"]);
+
+      UserSession.setUser(user);
       // User(resBody, userName, email, avatar)
-      log(" res body :  ${userData["userName"]}");
+      log("FRONTEND  access token  at login time:  ${user.getAccessToken()}");
+      log("User logged In Successfully");
+
       return res;
     } catch (e) {
       log("Error during login: $e");

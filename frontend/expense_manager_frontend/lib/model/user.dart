@@ -3,8 +3,19 @@ class User {
   String userName;
   String email;
   String avatar;
+ String accessToken;
+  String refreshToken;
 
-  User(this.userId, this.userName, this.email, this.avatar);
+  User(this.userId, this.userName, this.email, this.avatar, this.accessToken,
+      this.refreshToken);
+
+  String getAccessToken() {
+    return accessToken;
+  }
+
+  String getRefreshToken() {
+    return refreshToken;
+  }
 
   String getUserId() {
     return userId;

@@ -121,59 +121,55 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select(
     "-password -refreshToken"
   );
-
-  loggedInUser["accessToken"] = accessToken;
-  loggedInUser["refreshToken"] = refreshToken;
+  const userObj = loggedInUser.toObject(); // Convert to plain object
+  userObj.accessToken = accessToken;
+  userObj.refreshToken = refreshToken;
 
   const options = {
     httpOnly: true,
     secure: true,
   };
 
+  console.log(`BACKEND access token is : ${userObj.accessToken}`);
+  console.log(`User logged In Successfully`);
+
+
   return res
     .status(200)
     .cookie("accessToken", accessToken, options)
     .cookie("refreshToken", refreshToken, options)
-    .json(
-      new ApiResponse(
-        200,
-        loggedInUser,
-        "User logged In Successfully"
-      )
-    );
+    .json(new ApiResponse(200, userObj, "User logged In Successfully"));
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-    console.log("in logout");
-    // 1. Clear the refresh token from the user in the database
-  const user =   await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        $set: {
-          refreshToken: undefined, // or you can use: null
-        },
+  console.log("in logout");
+  // 1. Clear the refresh token from the user in the database
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        refreshToken: undefined, // or you can use: null
       },
-      {
-        new: true, // return the updated user document (not really used here, but okay to have)
-      }
-    );
+    },
+    {
+      new: true, // return the updated user document (not really used here, but okay to have)
+    }
+  );
 
-    console.log(`accesstoken : ${user.accessToken}`);
-    
-  
-    // 2. Cookie options
-    const options = {
-      httpOnly: true,   
-      secure: true,
-    };
-  
-    // 3. Clear cookies from the browser and send success response
-    return res
-      .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
-      .json(new ApiResponse(200, {}, "User Logged Out"));
-  });
-  
+  console.log(`accesstoken : ${user.accessToken}`);
 
-module.exports = { registerUser, loginUser ,logoutUser};
+  // 2. Cookie options
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  // 3. Clear cookies from the browser and send success response
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User Logged Out"));
+});
+
+module.exports = { registerUser, loginUser, logoutUser };

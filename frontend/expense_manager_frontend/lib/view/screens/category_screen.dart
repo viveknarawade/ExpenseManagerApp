@@ -1,7 +1,5 @@
 import 'dart:developer';
 
-
-
 import 'package:expense_manager_frontend/view/widget/category_bottomsheet.dart';
 import 'package:expense_manager_frontend/view/widget/custom_dialog_box.dart';
 import 'package:expense_manager_frontend/view/widget/custom_drawer.dart';
@@ -49,7 +47,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
         alignment: Alignment.bottomCenter,
         child: FloatingActionButton.extended(
           onPressed: () {
-            CategoryBottomSheet.showCategoryBottomSheet(context);
+            setState(() {
+              CategoryBottomSheet.showCategoryBottomSheet(context);
+            });
           },
           icon: SvgPicture.asset(
             'assets/Svg/addIcon.svg',
@@ -79,7 +79,10 @@ class _CategoryScreenState extends State<CategoryScreen> {
       onTap: () {},
       onDoubleTap: () {
         log("double tap");
-        CustomDialogBox.showCustomDialogBox(context);
+
+        CustomDialogBox.showCustomDialogBox(
+          context,
+        );
       },
       child: Card(
         elevation: 8,
